@@ -175,4 +175,8 @@ try:
                     prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide insights."
                     response = model.generate_content(prompt)
                     st.markdown(response.text)
-                except Exception as api_err:
+                    st.error(f"AI Engine Error: {str(api_err)}")
+
+except Exception as init_err:
+    st.error(f"❌ Application Error: {str(init_err)}")
+
