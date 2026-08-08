@@ -6,90 +6,161 @@ import plotly.express as px
 # 1. Platform Global Configuration
 st.set_page_config(
     page_title="Careem Food UAE Growth Auto-Analyst | Anjalo Theophine Wilson",
-    page_icon="🚀",
+    page_icon="🟢",
     layout="wide"
 )
 
-# LUXURY GLOW THEME & INJECTED STYLING INTERFACE
+# PREMIUM ENTERPRISE GLOW THEME & HIGH-FIDELITY VECTOR INTERFACE
 st.markdown("""
 <style>
-    /* Global Background Adjustments */
+    /* Global App Background Canvas */
     .stApp {
-        background-color: #0E1117;
+        background-color: #0B0E14;
     }
     
-    /* Premium Header Container */
-    .executive-header {
-        background: linear-gradient(135deg, #10B981 0%, #047857 100%);
-        padding: 2.5rem;
+    /* Premium Executive Header Suite */
+    .executive-header-suite {
+        background: linear-gradient(135deg, #059669 0%, #064E3B 100%);
+        padding: 3rem;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
-        margin-bottom: 2rem;
-        color: #ffffff !important;
-    }
-    .executive-title {
-        font-family: 'Inter', sans-serif;
-        font-size: 2.85rem !important;
-        font-weight: 800 !important;
-        letter-spacing: -1px;
-        margin: 0 !important;
-        color: #ffffff !important;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .executive-subtitle {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.25rem !important;
-        font-weight: 500 !important;
-        color: #A7F3D0 !important;
-        margin-top: 0.5rem !important;
+        box-shadow: 0 20px 40px rgba(4, 120, 87, 0.15);
+        margin-bottom: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(16, 185, 129, 0.2);
     }
     
-    /* Graphic Portfolio Metrics Cards */
-    .metric-card {
-        background: #1F2937;
-        border: 1px solid #374151;
-        border-top: 4px solid #10B981;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        text-align: center;
-        transition: transform 0.3s ease;
+    /* Logo Container Flex Setup */
+    .header-flex-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 1rem;
     }
-    .metric-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
+    
+    .careem-logo-container {
+        width: 80px;
+        height: 80px;
+        background: #ffffff;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        padding: 8px;
     }
-    .metric-val {
-        font-size: 2.2rem !important;
-        font-weight: 700 !important;
-        color: #10B981 !important;
-        margin: 0.5rem 0 !important;
+    
+    .careem-logo-img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
-    .metric-lbl {
-        font-size: 0.95rem !important;
-        color: #9CA3AF !important;
+    
+    .executive-title-text {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-size: 2.8rem !important;
+        font-weight: 900 !important;
+        letter-spacing: -1px;
+        line-height: 1.1;
+        margin: 0 !important;
+        color: #FFFFFF !important;
+        text-transform: uppercase;
+    }
+    .executive-tagline {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 1.3rem !important;
+        font-weight: 600 !important;
+        color: #A7F3D0 !important;
+        margin-top: 0.75rem !important;
+        letter-spacing: -0.2px;
+    }
+    .metadata-subtext {
+        font-size: 0.85rem;
+        color: #D1FAE5;
+        opacity: 0.75;
+        margin-top: 0.25rem;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
     
-    /* Strategic Abstract Frame */
-    .abstract-box {
-        background: #111827;
-        border-left: 5px solid #10B981;
+    /* High-End Glassmorphism Metric Cards */
+    .premium-metric-card {
+        background: rgba(31, 41, 55, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-top: 4px solid #059669;
+        padding: 1.75rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .premium-metric-card:hover {
+        transform: translateY(-6px);
+        border-top: 4px solid #10B981;
+        box-shadow: 0 15px 35px rgba(16, 185, 129, 0.12);
+        background: rgba(31, 41, 55, 0.85);
+    }
+    .premium-metric-val {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 2.35rem !important;
+        font-weight: 800 !important;
+        color: #10B981 !important;
+        margin: 0.4rem 0 !important;
+        letter-spacing: -0.5px;
+    }
+    .premium-metric-lbl {
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        color: #9CA3AF !important;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+    
+    /* Luxury Abstract Callout Structure */
+    .premium-abstract-frame {
+        background: rgba(17, 24, 39, 0.6);
+        border-left: 4px solid #059669;
         padding: 1.5rem;
-        border-radius: 8px;
-        color: #D1D5DB;
-        line-height: 1.6;
+        border-radius: 0 12px 12px 0;
+        color: #E5E7EB;
+        line-height: 1.7;
+        font-size: 0.98rem;
     }
 </style>
+
+<!-- BACKGROUND SYSTEM DECORATION ANIMATION CANVAS -->
+<div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; opacity: 0.07;">
+    <svg width="100%" height="100%" xmlns="http://w3.org">
+        <defs>
+            <pattern id="grid-matrix" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#10B981" stroke-width="1"/>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid-matrix)" />
+    </svg>
+</div>
 """, unsafe_allow_html=True)
 
-# 2. Main Executive Header Portfolio Context (PREMIUM BRANDING DROPDOWN)
+# 2. Main Executive Header Portfolio Layout with Injected Careem Branding Logo
 st.markdown("""
-<div class="executive-header">
-    <h1 class="executive-title">🚀 CAREEM FOOD — UAE GROWTH AUTO-ANALYST</h1>
-    <div class="executive-subtitle">💼 Developed & Engineered by Senior BI Candidate: <b>Anjalo Theophine Wilson</b></div>
-    <span style="font-size:0.85rem; color:#A7F3D0; opacity:0.8;">AI-Powered Data Architecture & Growth Analytics Hub | Production-Ready Environment</span>
+<div class="executive-header-suite">
+    <div class="header-flex-wrapper">
+        
+        <div class="careem-logo-container">
+            <svg class="careem-logo-img" viewBox="0 0 450 450" xmlns="http://w3.org">
+                <rect width="450" height="450" fill="#00E676" rx="90"/>
+                <circle cx="160" cy="140" r="45" fill="#004D40"/>
+                <path d="M 280 90 A 110 110 0 0 1 380 210 L 290 210 A 30 30 0 0 0 220 120 Z" fill="#004D40"/>
+                <path d="M 120 230 A 140 140 0 0 0 370 340 L 310 270 A 60 60 0 0 1 120 230 Z" fill="#004D40"/>
+            </svg>
+        </div>
+        <div>
+            <h1 class="executive-title-text">Careem Food — UAE Growth Auto-Analyst</h1>
+            <div class="executive-tagline">Developed & Engineered by Senior BI Candidate: Anjalo Theophine Wilson</div>
+        </div>
+    </div>
+    <div class="metadata-subtext">Enterprise Business Intelligence Engine • Production Deployment State</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -99,11 +170,11 @@ with st.expander("📌 STRATEGIC SYSTEM MAP & REFERENCE CITATIONS", expanded=Tru
     with col_meta1:
         st.markdown("### 🎯 Core Architecture Abstract")
         st.markdown("""
-        <div class="abstract-box">
-            This advanced analytics prototype automates growth telemetry diagnostics for Careem Food UAE. 
-            By ingesting deep pipeline consumer datasets, the system computes core financial metrics, 
-            maps volume distributions, and visualizes channel leakages instantly. This transitions traditional 
-            raw customer data logs into interactive strategic hubs, maximizing corporate strategy deployment.
+        <div class="premium-abstract-frame">
+            This advanced business intelligence engine automates growth telemetry diagnostics for Careem Food UAE. 
+            By processing structured cross-regional marketing records, the system calculates granular performance 
+            indicators, tracks volume allocations, and maps cost configurations dynamically. This converts passive data registers 
+            into highly operational management tools, expediting multi-channel business scaling.
         </div>
         """, unsafe_allow_html=True)
     with col_meta2:
@@ -115,7 +186,7 @@ with st.expander("📌 STRATEGIC SYSTEM MAP & REFERENCE CITATIONS", expanded=Tru
 st.divider()
 
 # 3. Sidebar Controls Layout
-st.sidebar.markdown("### 🔑 TELEMETRY FILTERS")
+st.sidebar.markdown("### 🎛️ SYSTEM CONTROLS")
 selected_cities = st.sidebar.multiselect("Active Region Subset", options=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"], default=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"])
 selected_channels = st.sidebar.multiselect("Active Growth Channels", options=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"], default=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"])
 
@@ -141,28 +212,28 @@ try:
     
     with col_m1:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-lbl">Total Segment Revenue</div>
-            <div class="metric-val">AED {total_revenue:,.2f}</div>
-            <div style="font-size:0.8rem; color:#10B981;">▲ 14.2% MoM Scale Baseline</div>
+        <div class="premium-metric-card">
+            <div class="premium-metric-lbl">Total Segment Revenue</div>
+            <div class="premium-metric-val">AED {total_revenue:,.2f}</div>
+            <div style="font-size:0.82rem; color:#10B981; font-weight:600;">▲ 14.2% MoM Scale Baseline</div>
         </div>
         """, unsafe_allow_html=True)
         
     with col_m2:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-lbl">Total Segment Orders</div>
-            <div class="metric-val">{total_orders:,}</div>
-            <div style="font-size:0.8rem; color:#10B981;">▲ Volume Capacity Stable</div>
+        <div class="premium-metric-card">
+            <div class="premium-metric-lbl">Total Segment Orders</div>
+            <div class="premium-metric-val">{total_orders:,}</div>
+            <div style="font-size:0.82rem; color:#10B981; font-weight:600;">▲ Volume Capacity Stable</div>
         </div>
         """, unsafe_allow_html=True)
         
     with col_m3:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-lbl">Average Order Value (AOV)</div>
-            <div class="metric-val">AED {aov:.2f}</div>
-            <div style="font-size:0.8rem; color:#9CA3AF;">Market Segment Compliant</div>
+        <div class="premium-metric-card">
+            <div class="premium-metric-lbl">Average Order Value (AOV)</div>
+            <div class="premium-metric-val">AED {aov:.2f}</div>
+            <div style="font-size:0.82rem; color:#9CA3AF; font-weight:500;">Market Segment Compliant</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -173,53 +244,3 @@ try:
     channel_color_map = {
         'TikTok Brand': '#1D9BF0',       
         'Instagram Paid': '#E1306C',     
-        'Google Search': '#34A853',      
-        'Organic Referral': '#A155E8'    
-    }
-    
-    # Interactive Precision Performance Charts Section
-    st.markdown("### 🔎 Executive Performance Matrix Analytics")
-    left_chart, right_chart = st.columns(2)
-    
-    if 'city' in filtered_df.columns and 'revenue' in filtered_df.columns:
-        grouped_data = filtered_df.groupby(['city', 'acquisition_channel'], as_index=False)[['revenue']].sum()
-        fig_city = px.bar(
-            grouped_data, 
-            x='city', 
-            y='revenue', 
-            color='acquisition_channel',
-            color_discrete_map=channel_color_map,
-            title="Revenue Stratification by City & Acquisition Channel", 
-            labels={'revenue': 'Total Revenue (AED)', 'city': 'City', 'acquisition_channel': 'Marketing Channel'},
-            template="plotly_dark",
-            barmode='stack'
-        )
-        fig_city.update_traces(hovertemplate="<b>City:</b> %{x}<br><b>Segment Revenue:</b> AED %{y:,.2f}")
-        fig_city.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(family="Inter, sans-serif"))
-        left_chart.plotly_chart(fig_city, use_container_width=True)
-        
-    if 'acquisition_channel' in filtered_df.columns and 'orders' in filtered_df.columns:
-        channel_grouped = filtered_df.groupby('acquisition_channel', as_index=False)['orders'].sum()
-        fig_channel = px.pie(
-            channel_grouped, 
-            names='acquisition_channel', 
-            values='orders', 
-            color='acquisition_channel',
-            color_discrete_map=channel_color_map,
-            title="Exact Volume Attribution by Acquisition Channel", 
-            hole=0.4, 
-            template="plotly_dark"
-        )
-        fig_channel.update_traces(textinfo='percent+value', hovertemplate="<b>Channel:</b> %{label}<br><b>Orders:</b> %{value:,}")
-        fig_channel.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(family="Inter, sans-serif"))
-        right_chart.plotly_chart(fig_channel, use_container_width=True)
-
-    st.divider()
-
-    # 5. Raw Data Inspection Table Explorer Component
-    st.markdown("### 📋 Granular Telemetry Subsystem Records")
-    with st.expander("🔍 Click to Expand Raw Telemetry Rows Dataframe", expanded=False):
-        st.dataframe(filtered_df, use_container_width=True)
-
-except Exception as init_err:
-    st.error(f"❌ Application Error: {str(init_err)}")
