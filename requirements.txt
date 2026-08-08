@@ -1,1 +1,6 @@
+textstreamlit
+pandas
+numpy
+plotly
+google-generativeai
 
