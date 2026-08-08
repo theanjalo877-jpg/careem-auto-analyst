@@ -179,3 +179,10 @@ try:
                     prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide: 1. WHAT THE DATA SAYS, 2. THE PROBLEM, 3. RECOMMENDED ACTION, 4. GROWTH EXPERIMENT FRAMEWORK."
                     
                     response = model.generate_content(prompt)
+                   
+                    st.markdown(response.text)
+                    
+                except Exception as e:
+                    st.error(f"API Error: {str(e)}")
+except Exception as e:
+    st.error(f"❌ Initialization Error: {str(e)}")
