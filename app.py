@@ -2,1019 +2,560 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
 
-
-# ============================================================
-# 1. GLOBAL CONFIGURATION
-# ============================================================
+# ---------------------------------------------------------------------
+# CAREEM FOOD UAE GROWTH AUTO-ANALYST
+# Portfolio / screening project by Anjalo Theophine Wilson
+#
+# Data note:
+# - data.csv is illustrative project data supplied with this repository.
+# - Research benchmarks are public and separately cited in the app.
+# - No internal Careem data is claimed or represented.
+# ---------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="Careem Food Growth Intelligence | Anjalo Theophine Wilson",
-    page_icon="●",
+    page_title="Careem Food UAE Growth Auto-Analyst | Anjalo Theophine Wilson",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-
-# ============================================================
-# 2. PREMIUM DESIGN SYSTEM
-# ============================================================
+# ---------------------------------------------------------------------
+# PREMIUM VISUAL SYSTEM
+# ---------------------------------------------------------------------
 
 st.markdown(
     """
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-/* ---------------------------------------------------------
-   ROOT
---------------------------------------------------------- */
-
-:root {
-    --bg: #05070a;
-    --panel: #0b1016;
-    --panel-2: #10161e;
-    --panel-3: #151c25;
-    --line: rgba(255,255,255,0.09);
-
-    --green: #00d084;
-    --green-soft: #7ce8b8;
-    --white: #f5f7fa;
-    --muted: #8f9baa;
-    --muted-2: #647080;
-
-    --blue: #4da3ff;
-    --amber: #f5b942;
-    --red: #ff6673;
-}
-
-/* ---------------------------------------------------------
-   GLOBAL
---------------------------------------------------------- */
-
-html, body, [class*="css"] {
-    font-family: "DM Sans", sans-serif;
-}
-
-.stApp {
-    background:
-        radial-gradient(
-            circle at 85% 5%,
-            rgba(0,208,132,0.10),
-            transparent 25%
-        ),
-        radial-gradient(
-            circle at 10% 80%,
-            rgba(77,163,255,0.06),
-            transparent 25%
-        ),
-        #05070a;
-    color: var(--white);
-}
-
-/* Subtle animated atmosphere */
-
-.stApp::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-
-    background-image:
-        linear-gradient(
-            rgba(255,255,255,0.018) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.018) 1px,
-            transparent 1px
-        );
-
-    background-size: 70px 70px;
-
-    mask-image:
-        linear-gradient(
-            to bottom,
-            black,
-            transparent 85%
-        );
-
-    animation: gridMove 18s linear infinite;
-}
-
-@keyframes gridMove {
-    from {
-        transform: translate3d(0,0,0);
-    }
-    to {
-        transform: translate3d(70px,70px,0);
-    }
-}
-
-.block-container {
-    position: relative;
-    z-index: 1;
-    max-width: 1500px;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
-}
-
-/* ---------------------------------------------------------
-   SIDEBAR
---------------------------------------------------------- */
-
-section[data-testid="stSidebar"] {
-    background:
-        linear-gradient(
-            180deg,
-            #080b10 0%,
-            #05070a 100%
-        );
-    border-right: 1px solid var(--line);
-}
-
-section[data-testid="stSidebar"] * {
-    font-family: "DM Sans", sans-serif;
-}
-
-.sidebar-brand {
-    padding: 0.5rem 0 1.5rem 0;
-}
-
-.sidebar-brand .small {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.16em;
-    color: var(--green);
-    text-transform: uppercase;
-}
-
-.sidebar-brand .title {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-top: 0.35rem;
-}
-
-/* ---------------------------------------------------------
-   HERO
---------------------------------------------------------- */
-
-.hero {
-    padding: 3rem 0 2.5rem 0;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: "";
-    position: absolute;
-    width: 320px;
-    height: 320px;
-    right: -100px;
-    top: -160px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,208,132,0.18),
-            transparent 68%
-        );
-
-    animation: pulseGlow 6s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-    0%, 100% {
-        opacity: 0.55;
-        transform: scale(0.95);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.08);
-    }
-}
-
-.eyebrow {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 1rem;
-}
-
-.hero h1 {
-    font-family: "Space Grotesk", sans-serif !important;
-    font-size: clamp(3rem, 6vw, 6rem) !important;
-    line-height: 0.94 !important;
-    letter-spacing: -0.055em !important;
-    font-weight: 700 !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffffff 20%,
-            #ccefe1 58%,
-            #00d084 100%
-        );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    margin: 0 !important;
-}
-
-.hero-subtitle {
-    max-width: 780px;
-    margin-top: 1.3rem;
-    color: #b7c0ca;
-    font-size: 1.05rem;
-    line-height: 1.65;
-}
-
-.hero-meta {
-    margin-top: 1.3rem;
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    text-transform: uppercase;
-}
-
-/* ---------------------------------------------------------
-   SECTION HEADINGS
---------------------------------------------------------- */
-
-.section-label {
-    font-family: "JetBrains Mono", monospace;
-    color: var(--green);
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    margin-bottom: 0.45rem;
-}
-
-.section-title {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 2rem;
-    font-weight: 650;
-    letter-spacing: -0.035em;
-    color: var(--white);
-    margin-bottom: 0.35rem;
-}
-
-.section-description {
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-}
-
-/* ---------------------------------------------------------
-   CARDS
---------------------------------------------------------- */
-
-.premium-card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20,27,36,0.96),
-            rgba(8,12,17,0.96)
-        );
-
-    border: 1px solid var(--line);
-    border-radius: 18px;
-
-    padding: 1.45rem;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.20);
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.premium-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(0,208,132,0.30);
-
-    box-shadow:
-        0 25px 70px rgba(0,0,0,0.35);
-}
-
-.card-kicker {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    color: var(--muted-2);
-    text-transform: uppercase;
-}
-
-.card-title {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-top: 0.45rem;
-    color: var(--white);
-}
-
-.card-text {
-    color: #9da7b2;
-    font-size: 0.86rem;
-    line-height: 1.6;
-    margin-top: 0.55rem;
-}
-
-/* ---------------------------------------------------------
-   KPI CARDS
---------------------------------------------------------- */
-
-.kpi-card {
-    background:
-        linear-gradient(
-            145deg,
-            #101720,
-            #080c11
-        );
-
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 1.3rem;
-
-    position: relative;
-    overflow: hidden;
-}
-
-.kpi-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--green);
-}
-
-.kpi-label {
-    color: var(--muted);
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.10em;
-    text-transform: uppercase;
-}
-
-.kpi-value {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 2rem;
-    font-weight: 650;
-    letter-spacing: -0.04em;
-    margin-top: 0.35rem;
-    color: var(--white);
-}
-
-.kpi-note {
-    color: var(--green-soft);
-    font-size: 0.72rem;
-    margin-top: 0.3rem;
-}
-
-/* ---------------------------------------------------------
-   INSIGHT BOXES
---------------------------------------------------------- */
-
-.insight {
-    border-left: 2px solid var(--green);
-    background: rgba(0,208,132,0.045);
-    border-radius: 0 12px 12px 0;
-    padding: 1rem 1.15rem;
-    margin: 0.75rem 0;
-}
-
-.insight-title {
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 600;
-    color: var(--white);
-}
-
-.insight-text {
-    color: #aab4bf;
-    font-size: 0.84rem;
-    line-height: 1.55;
-    margin-top: 0.3rem;
-}
-
-/* ---------------------------------------------------------
-   TABLE
---------------------------------------------------------- */
-
-.dataframe {
-    border-radius: 12px !important;
-}
-
-/* ---------------------------------------------------------
-   SOURCE PANEL
---------------------------------------------------------- */
-
-.source-item {
-    border-bottom: 1px solid var(--line);
-    padding: 1rem 0;
-}
-
-.source-number {
-    font-family: "JetBrains Mono", monospace;
-    color: var(--green);
-    font-size: 0.65rem;
-}
-
-.source-title {
-    font-family: "Space Grotesk", sans-serif;
-    color: var(--white);
-    font-weight: 600;
-    margin-top: 0.2rem;
-}
-
-.source-description {
-    color: var(--muted);
-    font-size: 0.82rem;
-    line-height: 1.5;
-    margin-top: 0.25rem;
-}
-
-/* ---------------------------------------------------------
-   BUTTONS
---------------------------------------------------------- */
-
-.stButton > button {
-    border-radius: 10px;
-    border: 1px solid rgba(0,208,132,0.35);
-    background: rgba(0,208,132,0.06);
-    color: var(--white);
-    font-family: "DM Sans", sans-serif;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-.stButton > button:hover {
-    border-color: var(--green);
-    background: rgba(0,208,132,0.12);
-    color: var(--white);
-}
-
-/* ---------------------------------------------------------
-   STREAMLIT ELEMENT CLEANUP
---------------------------------------------------------- */
-
-div[data-testid="stMetric"] {
-    background: transparent;
-}
-
-div[data-testid="stMetricLabel"] {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-}
-
-div[data-testid="stMetricValue"] {
-    font-family: "Space Grotesk", sans-serif;
-}
-
-hr {
-    border-color: var(--line);
-}
-
-/* Hide unnecessary Streamlit decoration */
-
-#MainMenu {
-    visibility: hidden;
-}
-
-footer {
-    visibility: hidden;
-}
-
-</style>
-""",
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        :root {
+            --bg: #05070a;
+            --panel: #0b1016;
+            --line: rgba(255,255,255,0.09);
+            --text: #f5f7fa;
+            --muted: #9ca7b5;
+            --green: #22c55e;
+            --cyan: #38bdf8;
+            --amber: #f5b942;
+            --red: #fb7185;
+        }
+
+        html, body, [class*="css"] {
+            font-family: 'DM Sans', sans-serif !important;
+        }
+
+        .stApp {
+            background:
+                radial-gradient(circle at 88% 8%, rgba(16,185,129,0.10), transparent 30%),
+                radial-gradient(circle at 8% 35%, rgba(56,189,248,0.05), transparent 26%),
+                var(--bg) !important;
+            color: var(--text) !important;
+        }
+
+        .block-container {
+            max-width: 1450px;
+            padding-top: 1.2rem;
+            padding-bottom: 4rem;
+        }
+
+        [data-testid="stSidebar"] {
+            background: #070b10 !important;
+            border-right: 1px solid var(--line);
+        }
+
+        [data-testid="stSidebar"] * {
+            font-family: 'DM Sans', sans-serif !important;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif !important;
+            letter-spacing: -0.035em;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            padding: 42px 44px 38px 44px;
+            margin: 8px 0 24px 0;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.045), rgba(255,255,255,0.012)),
+                #080c11;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.30);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            filter: blur(70px);
+            pointer-events: none;
+            animation: drift 12s ease-in-out infinite alternate;
+        }
+
+        .hero::before {
+            right: -190px;
+            top: -230px;
+            background: rgba(16,185,129,0.14);
+        }
+
+        .hero::after {
+            left: -240px;
+            bottom: -280px;
+            background: rgba(56,189,248,0.07);
+            animation-delay: -5s;
+        }
+
+        @keyframes drift {
+            from { transform: translate3d(-12px, 8px, 0) scale(0.98); }
+            to { transform: translate3d(18px, -14px, 0) scale(1.05); }
+        }
+
+        .eyebrow {
+            position: relative;
+            z-index: 1;
+            color: var(--green);
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .hero-title {
+            position: relative;
+            z-index: 1;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-size: clamp(2.5rem, 5vw, 5.3rem);
+            line-height: 0.93;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .hero-title span {
+            color: var(--green);
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 820px;
+            color: #cbd5e1;
+            font-size: 1.02rem;
+            line-height: 1.7;
+            margin-top: 20px;
+        }
+
+        .hero-meta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .tag {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.035);
+            color: #dbe3ec;
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.72rem;
+        }
+
+        .section-label {
+            color: var(--muted);
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 7px;
+        }
+
+        .research-card,
+        .insight-card,
+        .metric-card,
+        .source-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012));
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .metric-value {
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 0.80rem;
+            margin-top: 3px;
+        }
+
+        .metric-note {
+            color: var(--green);
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.68rem;
+            margin-top: 10px;
+        }
+
+        .insight-number {
+            color: var(--green);
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.72rem;
+        }
+
+        .insight-title {
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 6px;
+        }
+
+        .insight-copy {
+            color: #aeb8c5;
+            font-size: 0.90rem;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .source-title {
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-weight: 600;
+            font-size: 0.98rem;
+        }
+
+        .source-copy {
+            color: #aeb8c5;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            margin-top: 7px;
+        }
+
+        .source-ref {
+            color: var(--green);
+            font-family: 'DM Mono', monospace !important;
+            font-size: 0.70rem;
+            margin-top: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .method-note {
+            border-left: 2px solid var(--green);
+            background: rgba(34,197,94,0.05);
+            padding: 13px 16px;
+            color: #b9c4d0;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0 20px 0;
+        }
+
+        .footer {
+            margin-top: 42px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            color: #758092;
+            font-size: 0.72rem;
+            line-height: 1.6;
+        }
+
+        div[data-baseweb="tab-list"] {
+            gap: 8px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        button[data-baseweb="tab"] {
+            font-family: 'Space Grotesk', sans-serif !important;
+            color: #9ca7b5 !important;
+            background: transparent !important;
+        }
+
+        button[data-baseweb="tab"][aria-selected="true"] {
+            color: #ffffff !important;
+        }
+
+        div[data-testid="stMetric"] {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--line);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .stButton > button {
+            border: 1px solid rgba(34,197,94,0.28) !important;
+            background: rgba(34,197,94,0.08) !important;
+            color: #dfffea !important;
+            border-radius: 10px !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-weight: 600 !important;
+        }
+
+        .stButton > button:hover {
+            border-color: rgba(34,197,94,0.55) !important;
+            background: rgba(34,197,94,0.14) !important;
+        }
+    </style>
+    """,
     unsafe_allow_html=True,
 )
 
+# ---------------------------------------------------------------------
+# DATA LOADING
+# ---------------------------------------------------------------------
 
-# ============================================================
-# 3. PLOTLY THEME
-# ============================================================
+@st.cache_data
+def load_data():
+    data = pd.read_csv("data.csv")
 
-PLOT_BG = "#0b1016"
-PAPER_BG = "#05070a"
-TEXT_COLOR = "#dce3ea"
-GRID_COLOR = "rgba(255,255,255,0.07)"
+    required_columns = {
+        "customer_id",
+        "city",
+        "orders",
+        "revenue",
+        "acquisition_channel",
+        "last_order_days",
+        "discount_used",
+        "delivery_time",
+        "cancellations",
+    }
 
-CHANNEL_COLORS = {
-    "Instagram Paid": "#E1306C",
-    "Google Search": "#4DA3FF",
-    "Organic Referral": "#00D084",
-    "TikTok Brand": "#A855F7",
-}
+    missing = required_columns.difference(data.columns)
 
+    if missing:
+        raise ValueError(
+            "data.csv is missing required columns: "
+            + ", ".join(sorted(missing))
+        )
 
-def apply_plotly_theme(fig):
-    fig.update_layout(
-        paper_bgcolor=PAPER_BG,
-        plot_bgcolor=PLOT_BG,
-        font=dict(
-            family="DM Sans",
-            color=TEXT_COLOR,
-        ),
-        title_font=dict(
-            family="Space Grotesk",
-            size=17,
-            color="#F5F7FA",
-        ),
-        legend=dict(
-            bgcolor="rgba(0,0,0,0)",
-            font=dict(size=11),
-        ),
-        margin=dict(
-            l=20,
-            r=20,
-            t=55,
-            b=20,
-        ),
-        xaxis=dict(
-            gridcolor=GRID_COLOR,
-            zerolinecolor=GRID_COLOR,
-        ),
-        yaxis=dict(
-            gridcolor=GRID_COLOR,
-            zerolinecolor=GRID_COLOR,
-        ),
-    )
-
-    return fig
-
-
-# ============================================================
-# 4. DATA LOADING
-# ============================================================
-
-def create_demo_dataset():
-    """
-    Creates a synthetic demonstration dataset.
-
-    IMPORTANT:
-    This is not Careem internal data.
-    It exists only to demonstrate analytical methodology.
-    """
-
-    rng = np.random.default_rng(42)
-
-    cities = [
-        "Dubai",
-        "Abu Dhabi",
-        "Sharjah",
-        "Ajman",
-    ]
-
-    channels = [
-        "Instagram Paid",
-        "Google Search",
-        "Organic Referral",
-        "TikTok Brand",
-    ]
-
-    months = pd.date_range(
-        start="2026-01-01",
-        periods=6,
-        freq="MS",
-    )
-
-    rows = []
-
-    for month in months:
-        for city in cities:
-            for channel in channels:
-
-                sessions = int(
-                    rng.integers(
-                        900,
-                        6500,
-                    )
-                )
-
-                conversion_rate = float(
-                    rng.uniform(
-                        0.045,
-                        0.115,
-                    )
-                )
-
-                orders = max(
-                    1,
-                    int(
-                        sessions
-                        * conversion_rate
-                    ),
-                )
-
-                aov = float(
-                    rng.uniform(
-                        52,
-                        88,
-                    )
-                )
-
-                revenue = orders * aov
-
-                returning_rate = float(
-                    rng.uniform(
-                        0.22,
-                        0.58,
-                    )
-                )
-
-                new_users = max(
-                    1,
-                    int(
-                        orders
-                        * (1 - returning_rate)
-                    ),
-                )
-
-                returning_users = max(
-                    1,
-                    orders - new_users,
-                )
-
-                rows.append(
-                    {
-                        "month": month,
-                        "city": city,
-                        "acquisition_channel": channel,
-                        "sessions": sessions,
-                        "orders": orders,
-                        "revenue": round(
-                            revenue,
-                            2,
-                        ),
-                        "aov": round(
-                            aov,
-                            2,
-                        ),
-                        "new_users": new_users,
-                        "returning_users": returning_users,
-                    }
-                )
-
-    return pd.DataFrame(rows)
+    return data
 
 
 try:
-    df = pd.read_csv("data.csv")
+    df = load_data()
+except Exception as exc:
+    st.error(f"Data loading failed: {exc}")
+    st.stop()
 
-    DATA_MODE = "User-provided dataset"
+# ---------------------------------------------------------------------
+# SIDEBAR CONTROLS
+# ---------------------------------------------------------------------
 
-except FileNotFoundError:
-    df = create_demo_dataset()
+st.sidebar.markdown("## CONTROL PANEL")
+st.sidebar.caption(
+    "Filters affect the project dataset. Scenario inputs are separated from observed data."
+)
 
-    DATA_MODE = "Synthetic demonstration dataset"
+cities = sorted(df["city"].dropna().unique().tolist())
+channels = sorted(df["acquisition_channel"].dropna().unique().tolist())
 
+selected_cities = st.sidebar.multiselect(
+    "Markets",
+    options=cities,
+    default=cities,
+)
 
-# ============================================================
-# 5. DATA NORMALISATION
-# ============================================================
+selected_channels = st.sidebar.multiselect(
+    "Acquisition channels",
+    options=channels,
+    default=channels,
+)
 
-df.columns = [
-    str(column).strip()
-    for column in df.columns
-]
+scenario_spend = st.sidebar.number_input(
+    "Scenario: monthly marketing spend (AED)",
+    min_value=0.0,
+    value=10000.0,
+    step=500.0,
+)
 
-required_columns = [
-    "city",
-    "acquisition_channel",
-    "orders",
-    "revenue",
-]
+scenario_new_customers = st.sidebar.number_input(
+    "Scenario: new customers acquired",
+    min_value=1,
+    value=100,
+    step=10,
+)
 
-missing_columns = [
-    column
-    for column in required_columns
-    if column not in df.columns
-]
+scenario_margin = st.sidebar.slider(
+    "Scenario: contribution margin",
+    min_value=0.05,
+    max_value=0.80,
+    value=0.35,
+    step=0.01,
+)
 
-if missing_columns:
-    st.error(
-        "The dataset is missing required columns: "
-        + ", ".join(missing_columns)
+scenario_monthly_orders = st.sidebar.number_input(
+    "Scenario: orders per active customer / month",
+    min_value=0.1,
+    value=3.0,
+    step=0.1,
+)
+
+scenario_lifetime_months = st.sidebar.number_input(
+    "Scenario: customer lifetime (months)",
+    min_value=1,
+    value=12,
+    step=1,
+)
+
+st.sidebar.markdown("---")
+st.sidebar.caption(
+    "Scenario metrics are modelling assumptions, not Careem internal figures."
+)
+
+filtered = df[
+    df["city"].isin(selected_cities)
+    & df["acquisition_channel"].isin(selected_channels)
+].copy()
+
+if filtered.empty:
+    st.warning(
+        "No records match the selected filters. Select at least one market "
+        "and one channel."
     )
     st.stop()
 
+# ---------------------------------------------------------------------
+# OBSERVED DATA METRICS
+# ---------------------------------------------------------------------
 
-if "sessions" not in df.columns:
-    df["sessions"] = np.maximum(
-        df["orders"] * 12,
-        1,
-    )
+customers = filtered["customer_id"].nunique()
+orders = int(filtered["orders"].sum())
+revenue = float(filtered["revenue"].sum())
+aov = revenue / orders if orders else 0.0
+arpu = revenue / customers if customers else 0.0
+opu = orders / customers if customers else 0.0
+avg_delivery = float(filtered["delivery_time"].mean())
+cancel_rate = float(filtered["cancellations"].mean())
 
-if "aov" not in df.columns:
-    df["aov"] = np.where(
-        df["orders"] > 0,
-        df["revenue"] / df["orders"],
-        0,
-    )
+at_risk = filtered[filtered["last_order_days"] >= 30]
+at_risk_rate = len(at_risk) / customers if customers else 0.0
 
-if "new_users" not in df.columns:
-    df["new_users"] = (
-        df["orders"] * 0.65
-    ).astype(int)
+# Scenario unit economics.
+cac = scenario_spend / scenario_new_customers
 
-if "returning_users" not in df.columns:
-    df["returning_users"] = (
-        df["orders"] * 0.35
-    ).astype(int)
-
-
-# ============================================================
-# 6. SIDEBAR NAVIGATION
-# ============================================================
-
-st.sidebar.markdown(
-    """
-<div class="sidebar-brand">
-    <div class="small">Business Intelligence Portfolio</div>
-    <div class="title">Growth Intelligence</div>
-</div>
-""",
-    unsafe_allow_html=True,
+scenario_ltv = (
+    aov
+    * scenario_monthly_orders
+    * scenario_margin
+    * scenario_lifetime_months
 )
 
-page = st.sidebar.radio(
-    "NAVIGATION",
-    [
-        "Executive Overview",
-        "Growth Diagnostics",
-        "Customer Funnel",
-        "Experimentation",
-        "Data Explorer",
-        "Methodology & Sources",
-    ],
-)
+ltv_cac = scenario_ltv / cac if cac > 0 else 0.0
+cltv = scenario_ltv
+scenario_arpu = aov * scenario_monthly_orders
 
-st.sidebar.divider()
-
-st.sidebar.markdown(
-    """
-<div class="card-kicker">
-DATASET STATUS
-</div>
-""",
-    unsafe_allow_html=True,
-)
-
-if DATA_MODE == "Synthetic demonstration dataset":
-    st.sidebar.warning(
-        "Synthetic demonstration data is active. "
-        "No Careem internal data is used."
-    )
-else:
-    st.sidebar.success(
-        "User-provided dataset loaded."
-    )
-
-
-# ============================================================
-# 7. FILTERS
-# ============================================================
-
-cities = sorted(
-    df["city"].dropna().unique().tolist()
-)
-
-channels = sorted(
-    df[
-        "acquisition_channel"
-    ]
-    .dropna()
-    .unique()
-    .tolist()
-)
-
-with st.sidebar.expander(
-    "ANALYSIS FILTERS",
-    expanded=True,
-):
-
-    selected_cities = st.multiselect(
-        "Cities",
-        cities,
-        default=cities,
-    )
-
-    selected_channels = st.multiselect(
-        "Acquisition channels",
-        channels,
-        default=channels,
-    )
-
-
-filtered_df = df[
-    df["city"].isin(
-        selected_cities
-    )
-    & df["acquisition_channel"].isin(
-        selected_channels
-    )
-].copy()
-
-
-# ============================================================
-# 8. COMMON METRICS
-# ============================================================
-
-total_revenue = float(
-    filtered_df["revenue"].sum()
-)
-
-total_orders = int(
-    filtered_df["orders"].sum()
-)
-
-total_sessions = int(
-    filtered_df["sessions"].sum()
-)
-
-aov = (
-    total_revenue / total_orders
-    if total_orders > 0
-    else 0
-)
-
-conversion_rate = (
-    total_orders / total_sessions * 100
-    if total_sessions > 0
-    else 0
-)
-
-returning_users = int(
-    filtered_df[
-        "returning_users"
-    ].sum()
-)
-
-new_users = int(
-    filtered_df[
-        "new_users"
-    ].sum()
-)
-
-retention_mix = (
-    returning_users
-    /
-    max(
-        returning_users + new_users,
-        1,
-    )
-    * 100
-)
-
-
-# ============================================================
-# 9. HERO
-# ============================================================
+# ---------------------------------------------------------------------
+# HERO
+# ---------------------------------------------------------------------
 
 st.markdown(
     """
-<div class="hero">
-
-<div class="eyebrow">
-CAREEM FOOD / GROWTH INTELLIGENCE CASE STUDY
-</div>
-
-<h1>
-Growth<br>
-Auto-Analyst
-</h1>
-
-<div class="hero-subtitle">
-An analytical decision-support prototype designed to turn
-growth telemetry into performance signals, customer insights,
-experimentation priorities and practical business actions.
-</div>
-
-<div class="hero-meta">
-<span>ANJALO THEOPHINE WILSON</span>
-<span>BUSINESS ANALYTICS</span>
-<span>DATA STORYTELLING</span>
-<span>GROWTH STRATEGY</span>
-</div>
-
-</div>
-""",
+    <section class="hero">
+        <div class="eyebrow">Growth intelligence / UAE food delivery</div>
+        <h1 class="hero-title">
+            Careem Food<br>
+            <span>Growth Auto-Analyst</span>
+        </h1>
+        <p class="hero-copy">
+            A portfolio-grade analytics system that turns customer, channel and
+            operational telemetry into growth decisions. The model combines
+            performance reporting, customer intelligence, unit economics,
+            experimentation and market research rather than presenting charts alone.
+        </p>
+        <div class="hero-meta">
+            <span class="tag">Business Analytics</span>
+            <span class="tag">Digital Analytics</span>
+            <span class="tag">Customer Experience</span>
+            <span class="tag">Growth Strategy</span>
+            <span class="tag">CAC / LTV / CLTV</span>
+            <span class="tag">Cohort Analysis</span>
+            <span class="tag">A/B Testing</span>
+            <span class="tag">Decision Intelligence</span>
+        </div>
+    </section>
+    """,
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    """
+    <div class="method-note">
+        <strong>Methodology:</strong> The repository dataset is a small illustrative
+        dataset created for the portfolio challenge. Public research is used only
+        for external market context. No confidential Careem data is claimed, and
+        no public benchmark is substituted into the project dataset.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-# ============================================================
-# 10. EXECUTIVE OVERVIEW
-# ============================================================
+tabs = st.tabs(
+    [
+        "Executive Overview",
+        "Growth Economics",
+        "Customer Intelligence",
+        "Experimentation",
+        "Market Intelligence",
+        "References",
+    ]
+)
 
-if page == "Executive Overview":
+# ---------------------------------------------------------------------
+# TAB 1: EXECUTIVE OVERVIEW
+# ---------------------------------------------------------------------
 
+with tabs[0]:
     st.markdown(
-        """
-<div class="section-label">
-01 / Executive Overview
-</div>
-
-<div class="section-title">
-From raw signals to business decisions
-</div>
-
-<div class="section-description">
-A compact executive view of the selected market and acquisition mix.
-</div>
-""",
+        '<div class="section-label">01 / Executive overview</div>',
         unsafe_allow_html=True,
     )
+    st.title("Performance at a glance")
 
-    k1, k2, k3, k4 = st.columns(4)
+    metric_cols = st.columns(5)
 
-    with k1:
-        st.markdown(
-            f"""
-<div class="kpi-card">
-<div class="kpi-label">Revenue</div>
-<div class="kpi-value">AED {total_revenue:,.0f}</div>
-<div class="kpi-note">Selected segment</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+    metrics = [
+        ("Revenue", f"AED {revenue:,.0f}", "Observed project data"),
+        ("Orders", f"{orders:,}", "Observed project data"),
+        ("AOV", f"AED {aov:,.2f}", "Revenue / orders"),
+        ("ARPU", f"AED {arpu:,.2f}", "Revenue / customer"),
+        ("OPU", f"{opu:,.2f}", "Orders / customer"),
+    ]
 
-    with k2:
-        st.markdown(
-            f"""
-<div class="kpi-card">
-<div class="kpi-label">Orders</div>
-<div class="kpi-value">{total_orders:,}</div>
-<div class="kpi-note">Observed transactions</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+    for col, (label, value, note) in zip(metric_cols, metrics):
+        with col:
+            st.markdown(
+                f"""
+                <div class="metric-card">
+                    <div class="metric-label">{label}</div>
+                    <div class="metric-value">{value}</div>
+                    <div class="metric-note">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-    with k3:
-        st.markdown(
-            f"""
-<div class="kpi-card">
-<div class="kpi-label">AOV</div>
-<div class="kpi-value">AED {aov:,.2f}</div>
-<div class="kpi-note">Revenue / orders</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+    st.markdown("### Performance matrix")
 
-    with k4:
-        st.markdown(
-            f"""
-<div class="kpi-card">
-<div class="kpi-label">Conversion</div>
-<div class="kpi-value">{conversion_rate:.2f}%</div>
-<div class="kpi-note">Orders / sessions</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+    left_chart, right_chart = st.columns(2)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    left, right = st.columns(
-        [1.45, 1],
-        gap="large",
-    )
-
-    with left:
-
+    with left_chart:
         city_channel = (
-            filtered_df
-            .groupby(
-                [
-                    "city",
-                    "acquisition_channel",
-                ],
+            filtered.groupby(
+                ["city", "acquisition_channel"],
                 as_index=False,
             )["revenue"]
             .sum()
@@ -1025,832 +566,895 @@ A compact executive view of the selected market and acquisition mix.
             x="city",
             y="revenue",
             color="acquisition_channel",
-            color_discrete_map=CHANNEL_COLORS,
             barmode="stack",
-            title="Revenue distribution by market and acquisition channel",
+            template="plotly_dark",
+            title="Revenue by market and acquisition channel",
             labels={
-                "revenue": "Revenue (AED)",
                 "city": "Market",
+                "revenue": "Revenue (AED)",
                 "acquisition_channel": "Channel",
             },
         )
 
-        fig = apply_plotly_theme(fig)
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True,
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            legend_title_text="",
+            margin=dict(l=10, r=10, t=55, b=10),
         )
 
-    with right:
+        st.plotly_chart(fig, use_container_width=True)
 
+    with right_chart:
         channel_orders = (
-            filtered_df
-            .groupby(
+            filtered.groupby(
                 "acquisition_channel",
                 as_index=False,
             )["orders"]
             .sum()
+            .sort_values("orders", ascending=False)
         )
-
-        fig = px.pie(
-            channel_orders,
-            names="acquisition_channel",
-            values="orders",
-            hole=0.62,
-            color="acquisition_channel",
-            color_discrete_map=CHANNEL_COLORS,
-            title="Order contribution by acquisition channel",
-        )
-
-        fig = apply_plotly_theme(fig)
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True,
-        )
-
-    st.markdown(
-        """
-<div class="section-title">
-Decision signals
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    channel_summary = (
-        filtered_df
-        .groupby(
-            "acquisition_channel",
-            as_index=False,
-        )
-        .agg(
-            revenue=("revenue", "sum"),
-            orders=("orders", "sum"),
-            sessions=("sessions", "sum"),
-        )
-    )
-
-    channel_summary["conversion_rate"] = (
-        channel_summary["orders"]
-        /
-        channel_summary["sessions"]
-        * 100
-    )
-
-    if not channel_summary.empty:
-
-        strongest_revenue = (
-            channel_summary
-            .sort_values(
-                "revenue",
-                ascending=False,
-            )
-            .iloc[0]
-        )
-
-        strongest_conversion = (
-            channel_summary
-            .sort_values(
-                "conversion_rate",
-                ascending=False,
-            )
-            .iloc[0]
-        )
-
-        st.markdown(
-            f"""
-<div class="insight">
-<div class="insight-title">
-Revenue concentration
-</div>
-<div class="insight-text">
-<strong>{strongest_revenue['acquisition_channel']}</strong>
-is currently the largest revenue contributor in the selected dataset,
-with AED {strongest_revenue['revenue']:,.0f}.
-</div>
-</div>
-
-<div class="insight">
-<div class="insight-title">
-Conversion opportunity
-</div>
-<div class="insight-text">
-<strong>{strongest_conversion['acquisition_channel']}</strong>
-shows the highest observed order-to-session conversion rate at
-{strongest_conversion['conversion_rate']:.2f}%.
-This should be investigated for transferable acquisition or
-landing-page behaviours before increasing spend.
-</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-
-# ============================================================
-# 11. GROWTH DIAGNOSTICS
-# ============================================================
-
-elif page == "Growth Diagnostics":
-
-    st.markdown(
-        """
-<div class="section-label">
-02 / Growth Diagnostics
-</div>
-
-<div class="section-title">
-Where is growth coming from?
-</div>
-
-<div class="section-description">
-Diagnose revenue, volume and conversion performance across markets and channels.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    city_summary = (
-        filtered_df
-        .groupby(
-            "city",
-            as_index=False,
-        )
-        .agg(
-            revenue=("revenue", "sum"),
-            orders=("orders", "sum"),
-            sessions=("sessions", "sum"),
-        )
-    )
-
-    city_summary["conversion_rate"] = (
-        city_summary["orders"]
-        /
-        city_summary["sessions"]
-        * 100
-    )
-
-    city_summary["aov"] = (
-        city_summary["revenue"]
-        /
-        city_summary["orders"]
-    )
-
-    c1, c2 = st.columns(2)
-
-    with c1:
 
         fig = px.bar(
-            city_summary.sort_values(
-                "revenue",
-                ascending=False,
-            ),
-            x="city",
-            y="revenue",
-            title="Revenue by market",
+            channel_orders,
+            x="orders",
+            y="acquisition_channel",
+            orientation="h",
+            template="plotly_dark",
+            title="Order volume by acquisition channel",
             labels={
-                "revenue": "Revenue (AED)",
-                "city": "Market",
+                "orders": "Orders",
+                "acquisition_channel": "Channel",
             },
         )
 
-        fig = apply_plotly_theme(fig)
-
-        fig.update_traces(
-            marker_color="#00D084"
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=10, r=10, t=55, b=10),
+            yaxis=dict(categoryorder="total ascending"),
         )
 
-        st.plotly_chart(
-            fig,
-            use_container_width=True,
-        )
+        st.plotly_chart(fig, use_container_width=True)
 
-    with c2:
+    st.markdown("### Decision layer")
 
-        fig = px.scatter(
-            city_summary,
-            x="conversion_rate",
-            y="aov",
-            size="orders",
-            color="city",
-            title="Conversion vs. average order value",
-            labels={
-                "conversion_rate": "Conversion rate (%)",
-                "aov": "Average order value (AED)",
-                "city": "Market",
-            },
-        )
+    decision_cols = st.columns(3)
 
-        fig = apply_plotly_theme(fig)
+    decisions = [
+        (
+            "01",
+            "Protect frequency before chasing volume",
+            f"The observed dataset averages {opu:.2f} orders per customer. "
+            "Growth should be evaluated on repeat behaviour, not acquisition "
+            "volume alone.",
+        ),
+        (
+            "02",
+            "Treat delivery reliability as a growth variable",
+            f"Average observed delivery time is {avg_delivery:.1f} minutes "
+            f"and the observed cancellation rate is {cancel_rate:.1%}. "
+            "Both should sit beside commercial metrics.",
+        ),
+        (
+            "03",
+            "Separate acquisition efficiency from customer value",
+            "ARPU and OPU can be calculated directly from the project data, "
+            "while CAC and LTV require explicit assumptions rather than "
+            "fabricated source data.",
+        ),
+    ]
 
-        st.plotly_chart(
-            fig,
-            use_container_width=True,
-        )
+    for col, (number, title, copy) in zip(decision_cols, decisions):
+        with col:
+            st.markdown(
+                f"""
+                <div class="insight-card">
+                    <div class="insight-number">{number}</div>
+                    <div class="insight-title">{title}</div>
+                    <div class="insight-copy">{copy}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+# ---------------------------------------------------------------------
+# TAB 2: GROWTH ECONOMICS
+# ---------------------------------------------------------------------
+
+with tabs[1]:
+    st.markdown(
+        '<div class="section-label">02 / Growth economics</div>',
+        unsafe_allow_html=True,
+    )
+    st.title("CAC, LTV, ARPU, OPU and CLTV")
 
     st.markdown(
         """
-<div class="section-title">
-Market diagnostic table
-</div>
-""",
+        <div class="method-note">
+            CAC, LTV and CLTV are scenario-modelled because the repository does not
+            contain paid-media spend, gross margin, retention duration or acquisition
+            counts. ARPU and OPU are calculated directly from the supplied project data.
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    display_city = city_summary.copy()
+    econ_cols = st.columns(5)
 
-    display_city["revenue"] = (
-        display_city["revenue"]
-        .round(2)
-    )
-
-    display_city["aov"] = (
-        display_city["aov"]
-        .round(2)
-    )
-
-    display_city["conversion_rate"] = (
-        display_city["conversion_rate"]
-        .round(2)
-    )
-
-    st.dataframe(
-        display_city,
-        use_container_width=True,
-        hide_index=True,
-    )
-
-
-# ============================================================
-# 12. CUSTOMER FUNNEL
-# ============================================================
-
-elif page == "Customer Funnel":
-
-    st.markdown(
-        """
-<div class="section-label">
-03 / Customer Funnel
-</div>
-
-<div class="section-title">
-Understanding customer movement
-</div>
-
-<div class="section-description">
-A simplified funnel view connecting acquisition activity to orders and repeat behaviour.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    funnel_values = [
-        total_sessions,
-        new_users + returning_users,
-        total_orders,
+    econ_metrics = [
+        ("CAC", f"AED {cac:,.2f}", "Scenario spend / new customers"),
+        (
+            "LTV",
+            f"AED {scenario_ltv:,.2f}",
+            "AOV × frequency × margin × lifetime",
+        ),
+        ("LTV / CAC", f"{ltv_cac:.2f}x", "Scenario efficiency"),
+        (
+            "Scenario ARPU",
+            f"AED {scenario_arpu:,.2f}",
+            "AOV × monthly frequency",
+        ),
+        ("CLTV", f"AED {cltv:,.2f}", "Modelled customer value"),
     ]
 
-    funnel_labels = [
-        "Sessions",
-        "Active users represented",
-        "Orders",
-    ]
+    for col, (label, value, note) in zip(econ_cols, econ_metrics):
+        with col:
+            st.markdown(
+                f"""
+                <div class="metric-card">
+                    <div class="metric-label">{label}</div>
+                    <div class="metric-value">{value}</div>
+                    <div class="metric-note">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-    fig = go.Figure(
-        go.Funnel(
-            y=funnel_labels,
-            x=funnel_values,
-            textinfo="value+percent initial",
-            marker=dict(
-                color=[
-                    "#647080",
-                    "#4DA3FF",
-                    "#00D084",
-                ]
-            ),
-        )
+    st.markdown("### Unit economics sensitivity")
+
+    frequencies = np.linspace(
+        max(0.5, scenario_monthly_orders - 1.5),
+        scenario_monthly_orders + 1.5,
+        7,
+    )
+
+    sensitivity = pd.DataFrame(
+        {
+            "Monthly orders / customer": frequencies,
+            "Scenario LTV": [
+                aov
+                * frequency
+                * scenario_margin
+                * scenario_lifetime_months
+                for frequency in frequencies
+            ],
+        }
+    )
+
+    fig = px.line(
+        sensitivity,
+        x="Monthly orders / customer",
+        y="Scenario LTV",
+        markers=True,
+        template="plotly_dark",
+        title="How customer frequency changes modelled lifetime value",
     )
 
     fig.update_layout(
-        title="Acquisition-to-order funnel",
-        paper_bgcolor=PAPER_BG,
-        plot_bgcolor=PLOT_BG,
-        font=dict(
-            family="DM Sans",
-            color=TEXT_COLOR,
-        ),
-        title_font=dict(
-            family="Space Grotesk",
-            size=18,
-        ),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=55, b=10),
     )
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True,
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("### Metric definitions")
+
+    definitions = pd.DataFrame(
+        {
+            "Metric": ["CAC", "LTV", "ARPU", "OPU", "CLTV"],
+            "Definition": [
+                "Customer acquisition cost: acquisition spend divided by acquired customers.",
+                "Lifetime value: modelled value created by a customer over an assumed lifetime.",
+                "Average revenue per user/customer.",
+                "Orders per user/customer.",
+                "Customer lifetime value using the explicit scenario model.",
+            ],
+            "Data status": [
+                "Scenario",
+                "Scenario",
+                "Observed",
+                "Observed",
+                "Scenario",
+            ],
+        }
     )
-
-    f1, f2 = st.columns(2)
-
-    with f1:
-
-        st.markdown(
-            f"""
-<div class="premium-card">
-
-<div class="card-kicker">
-CUSTOMER MIX
-</div>
-
-<div class="card-title">
-New vs. returning customers
-</div>
-
-<div class="card-text">
-Returning users represent approximately
-<strong>{retention_mix:.1f}%</strong>
-of the user mix represented by the dataset.
-This is a diagnostic indicator rather than a measured
-Careem customer-retention rate.
-</div>
-
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-    with f2:
-
-        st.markdown(
-            f"""
-<div class="premium-card">
-
-<div class="card-kicker">
-ANALYTICAL QUESTION
-</div>
-
-<div class="card-title">
-Where should retention investment focus?
-</div>
-
-<div class="card-text">
-Compare acquisition channels by repeat-user contribution,
-conversion rate and revenue per order before reallocating
-growth investment.
-The next analytical step would be cohort-level retention
-and lifetime-value analysis using actual company data.
-</div>
-
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-
-# ============================================================
-# 13. EXPERIMENTATION
-# ============================================================
-
-elif page == "Experimentation":
-
-    st.markdown(
-        """
-<div class="section-label">
-04 / Experimentation
-</div>
-
-<div class="section-title">
-Turning diagnosis into action
-</div>
-
-<div class="section-description">
-Illustrative experiments derived from the observed signals.
-These are hypotheses, not claims about Careem's current strategy.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    experiments = [
-        (
-            "01",
-            "Channel conversion experiment",
-            "Test whether the strongest-converting acquisition channel can transfer its messaging, landing experience or audience structure to another high-volume channel.",
-            "Primary KPI: conversion rate"
-        ),
-        (
-            "02",
-            "Order-value experiment",
-            "Test basket-building mechanics such as bundles or threshold-based offers while monitoring incremental revenue and unit economics.",
-            "Primary KPI: incremental contribution per order"
-        ),
-        (
-            "03",
-            "Retention experiment",
-            "Create behavioural cohorts based on order frequency and recency, then test targeted re-engagement journeys against a control group.",
-            "Primary KPI: repeat-order rate"
-        ),
-        (
-            "04",
-            "Market-specific experiment",
-            "Compare high-conversion and high-revenue markets to identify transferable customer, merchant or operational characteristics.",
-            "Primary KPI: revenue per active customer"
-        ),
-    ]
-
-    for number, title, description, metric in experiments:
-
-        st.markdown(
-            f"""
-<div class="premium-card">
-
-<div class="card-kicker">
-EXPERIMENT {number}
-</div>
-
-<div class="card-title">
-{title}
-</div>
-
-<div class="card-text">
-{description}
-</div>
-
-<div style="
-    margin-top:0.8rem;
-    font-family:'JetBrains Mono';
-    font-size:0.65rem;
-    color:#00D084;
-">
-{metric.upper()}
-</div>
-
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
-            "<br>",
-            unsafe_allow_html=True,
-        )
-
-    st.markdown(
-        """
-<div class="insight">
-<div class="insight-title">
-Experimentation principle
-</div>
-<div class="insight-text">
-A growth decision should not be based only on correlation.
-The recommended sequence is hypothesis → experiment → control →
-measurement → interpretation → decision.
-</div>
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-
-# ============================================================
-# 14. DATA EXPLORER
-# ============================================================
-
-elif page == "Data Explorer":
-
-    st.markdown(
-        """
-<div class="section-label">
-05 / Data Explorer
-</div>
-
-<div class="section-title">
-Inspect the analytical layer
-</div>
-
-<div class="section-description">
-Explore the records powering the dashboard and review calculated fields.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-<div class="premium-card">
-
-<div class="card-kicker">
-DATASET
-</div>
-
-<div class="card-title">
-{DATA_MODE}
-</div>
-
-<div class="card-text">
-Records currently loaded: <strong>{len(filtered_df):,}</strong>.
-The dashboard recalculates the displayed metrics dynamically from
-the selected records.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    st.markdown("<br>", unsafe_allow_html=True)
 
     st.dataframe(
-        filtered_df,
+        definitions,
         use_container_width=True,
         hide_index=True,
     )
 
-    csv = filtered_df.to_csv(
-        index=False
-    ).encode("utf-8")
+# ---------------------------------------------------------------------
+# TAB 3: CUSTOMER INTELLIGENCE
+# ---------------------------------------------------------------------
 
-    st.download_button(
-        "Export filtered dataset",
-        csv,
-        "careem_growth_analysis_export.csv",
-        "text/csv",
+with tabs[2]:
+    st.markdown(
+        '<div class="section-label">03 / Customer intelligence</div>',
+        unsafe_allow_html=True,
     )
-
-
-# ============================================================
-# 15. METHODOLOGY & SOURCES
-# ============================================================
-
-elif page == "Methodology & Sources":
+    st.title("Cohort analysis, churn / attrition modelling and lifecycle")
 
     st.markdown(
         """
-<div class="section-label">
-06 / Methodology & Sources
-</div>
-
-<div class="section-title">
-Evidence, assumptions and boundaries
-</div>
-
-<div class="section-description">
-This section makes the analytical provenance explicit.
-</div>
-""",
+        <div class="method-note">
+            The repository contains recency, order frequency, revenue and cancellation
+            fields. It does not contain true acquisition dates, so the lifecycle view
+            uses transparent recency cohorts rather than pretending they are acquisition
+            cohorts. The 31+ day group is an at-risk heuristic, not a contractual churn definition.
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    st.markdown(
-        """
-<div class="premium-card">
+    def recency_bucket(days):
+        if days <= 7:
+            return "0–7 days"
+        if days <= 14:
+            return "8–14 days"
+        if days <= 30:
+            return "15–30 days"
+        return "31+ days"
 
-<div class="card-kicker">
-IMPORTANT DATA DISCLOSURE
-</div>
-
-<div class="card-title">
-This is an independent analytical prototype.
-</div>
-
-<div class="card-text">
-The dashboard is not an official Careem system and does not use
-Careem confidential, proprietary or internal data.
-When the local data.csv file is unavailable, the application generates
-a synthetic dataset solely to demonstrate analytical methods,
-dashboard design and decision-support logic.
-</div>
-
-</div>
-""",
-        unsafe_allow_html=True,
+    lifecycle = filtered.copy()
+    lifecycle["recency_cohort"] = lifecycle["last_order_days"].apply(
+        recency_bucket
     )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-<div class="section-title">
-Analytical framework
-</div>
-""",
-        unsafe_allow_html=True,
+    cohort_summary = (
+        lifecycle.groupby(
+            "recency_cohort",
+            as_index=False,
+        )
+        .agg(
+            customers=("customer_id", "nunique"),
+            orders=("orders", "sum"),
+            revenue=("revenue", "sum"),
+            avg_delivery=("delivery_time", "mean"),
+            cancellations=("cancellations", "sum"),
+        )
     )
 
-    framework = [
+    cohort_order = [
+        "0–7 days",
+        "8–14 days",
+        "15–30 days",
+        "31+ days",
+    ]
+
+    cohort_summary["recency_cohort"] = pd.Categorical(
+        cohort_summary["recency_cohort"],
+        categories=cohort_order,
+        ordered=True,
+    )
+
+    cohort_summary = cohort_summary.sort_values("recency_cohort")
+
+    left_chart, right_chart = st.columns(2)
+
+    with left_chart:
+        fig = px.bar(
+            cohort_summary,
+            x="recency_cohort",
+            y="customers",
+            template="plotly_dark",
+            title="Customer recency distribution",
+            labels={
+                "recency_cohort": "Last-order recency",
+                "customers": "Customers",
+            },
+        )
+
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=10, r=10, t=55, b=10),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+    with right_chart:
+        fig = px.bar(
+            cohort_summary,
+            x="recency_cohort",
+            y="revenue",
+            template="plotly_dark",
+            title="Revenue exposure by recency cohort",
+            labels={
+                "recency_cohort": "Last-order recency",
+                "revenue": "Revenue (AED)",
+            },
+        )
+
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=10, r=10, t=55, b=10),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("### Churn / attrition signal")
+
+    churn_cols = st.columns(3)
+
+    churn_metrics = [
         (
-            "01",
-            "Ingestion",
-            "Load structured operational or growth records."
+            "At-risk customers",
+            f"{len(at_risk):,}",
+            "Recency heuristic: 31+ days",
         ),
         (
-            "02",
-            "Validation",
-            "Check required fields, missing values and data consistency."
+            "At-risk rate",
+            f"{at_risk_rate:.1%}",
+            "Not a contractual churn definition",
         ),
         (
-            "03",
-            "Aggregation",
-            "Calculate revenue, orders, AOV, conversion and customer mix."
-        ),
-        (
-            "04",
-            "Diagnosis",
-            "Compare markets, acquisition channels and funnel behaviour."
-        ),
-        (
-            "05",
-            "Storytelling",
-            "Translate patterns into concise business questions and signals."
-        ),
-        (
-            "06",
-            "Action",
-            "Convert evidence into testable hypotheses and experiments."
+            "Cancellations",
+            f"{int(filtered['cancellations'].sum()):,}",
+            "Observed records",
         ),
     ]
 
-    for number, title, description in framework:
+    for col, (label, value, note) in zip(churn_cols, churn_metrics):
+        with col:
+            st.markdown(
+                f"""
+                <div class="metric-card">
+                    <div class="metric-label">{label}</div>
+                    <div class="metric-value">{value}</div>
+                    <div class="metric-note">{note}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-        st.markdown(
-            f"""
-<div class="source-item">
+    st.markdown("### Customer value map")
 
-<div class="source-number">
-STEP {number}
-</div>
-
-<div class="source-title">
-{title}
-</div>
-
-<div class="source-description">
-{description}
-</div>
-
-</div>
-""",
-            unsafe_allow_html=True,
+    customer_view = (
+        filtered.groupby(
+            "customer_id",
+            as_index=False,
         )
+        .agg(
+            orders=("orders", "sum"),
+            revenue=("revenue", "sum"),
+            last_order_days=("last_order_days", "min"),
+            delivery_time=("delivery_time", "mean"),
+            cancellations=("cancellations", "sum"),
+        )
+    )
+
+    customer_view["segment"] = np.select(
+        [
+            (
+                (customer_view["orders"] >= 10)
+                & (customer_view["last_order_days"] <= 14)
+            ),
+            customer_view["last_order_days"] >= 31,
+            customer_view["orders"] <= 2,
+        ],
+        [
+            "High-value active",
+            "At-risk / dormant",
+            "Low-frequency",
+        ],
+        default="Core active",
+    )
+
+    fig = px.scatter(
+        customer_view,
+        x="orders",
+        y="revenue",
+        size="revenue",
+        color="segment",
+        hover_data=[
+            "customer_id",
+            "last_order_days",
+            "delivery_time",
+        ],
+        template="plotly_dark",
+        title="Customer frequency vs. revenue",
+        labels={
+            "orders": "Orders",
+            "revenue": "Revenue (AED)",
+            "segment": "Lifecycle segment",
+        },
+    )
+
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=55, b=10),
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+# ---------------------------------------------------------------------
+# TAB 4: EXPERIMENTATION
+# ---------------------------------------------------------------------
+
+with tabs[3]:
+    st.markdown(
+        '<div class="section-label">04 / Experimentation</div>',
+        unsafe_allow_html=True,
+    )
+    st.title("A/B testing and conversion-rate logic")
 
     st.markdown(
         """
-<div class="section-title" style="margin-top:2rem;">
-References
-</div>
-""",
+        <div class="method-note">
+            A/B testing requires exposure counts, conversions and an experiment design.
+            The controls below are a simulation layer for demonstrating the analytical
+            method; they are not historical Careem experiment results.
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    sources = [
+    control_exposed = st.number_input(
+        "Control exposed",
+        min_value=100,
+        value=5000,
+        step=500,
+    )
+
+    control_converted = st.number_input(
+        "Control conversions",
+        min_value=0,
+        value=350,
+        step=10,
+    )
+
+    test_exposed = st.number_input(
+        "Test exposed",
+        min_value=100,
+        value=5000,
+        step=500,
+    )
+
+    test_converted = st.number_input(
+        "Test conversions",
+        min_value=0,
+        value=420,
+        step=10,
+    )
+
+    control_rate = control_converted / control_exposed
+    test_rate = test_converted / test_exposed
+    uplift = (
+        (test_rate / control_rate - 1)
+        if control_rate
+        else 0.0
+    )
+
+    ab_cols = st.columns(4)
+
+    ab_metrics = [
+        ("Control CVR", f"{control_rate:.2%}"),
+        ("Test CVR", f"{test_rate:.2%}"),
+        ("Relative uplift", f"{uplift:.1%}"),
         (
-            "01",
-            "Careem — About Us",
-            "Official Careem corporate source used only for publicly stated company context such as Careem's Everything App positioning, geographic footprint and platform description.",
-            "https://www.careem.com/en-AE/about-us/"
-        ),
-        (
-            "02",
-            "Careem — Food",
-            "Official Careem Food source used for public product context, including Food's restaurant marketplace positioning and customer-facing service description.",
-            "https://www.careem.com/en-AE/food/"
-        ),
-        (
-            "03",
-            "Careem — The Everything App",
-            "Official Careem source used to understand the public structure of the wider Careem platform and its Go, Eat, Get and Pay service categories.",
-            "https://www.careem.com/en-AE/"
-        ),
-        (
-            "04",
-            "Careem Engineering — Product Updates",
-            "Official Careem Engineering source used for public product context around recent Food and app-navigation improvements.",
-            "https://engineering.careem.com/"
-        ),
-        (
-            "05",
-            "Careem Growth Manager Job Description",
-            "User-provided job description. Used to shape the analytical themes demonstrated in this prototype: growth planning, dashboards, funnel health, experimentation, customer segmentation, program management and business decision support.",
-            ""
-        ),
-        (
-            "06",
-            "Anjalo Theophine Wilson — GitHub Repository",
-            "Project repository containing the implementation of this independent portfolio prototype.",
-            "https://github.com/theanjalo877-jpg/careem-auto-analyst"
+            "Incremental conversions",
+            f"{max(0, test_converted - control_converted):,}",
         ),
     ]
 
-    for number, title, description, url in sources:
+    for col, (label, value) in zip(ab_cols, ab_metrics):
+        with col:
+            st.markdown(
+                f"""
+                <div class="metric-card">
+                    <div class="metric-label">{label}</div>
+                    <div class="metric-value">{value}</div>
+                    <div class="metric-note">Simulation</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-        link_html = ""
+    experiment_df = pd.DataFrame(
+        {
+            "Variant": ["Control", "Test"],
+            "Exposed": [control_exposed, test_exposed],
+            "Conversions": [
+                control_converted,
+                test_converted,
+            ],
+            "Conversion rate": [
+                control_rate,
+                test_rate,
+            ],
+        }
+    )
 
-        if url:
-            link_html = f"""
-<div style="
-    margin-top:0.5rem;
-    font-family:'JetBrains Mono';
-    font-size:0.62rem;
-    color:#647080;
-">
-SOURCE AVAILABLE IN APPLICATION
-</div>
-"""
+    fig = px.bar(
+        experiment_df,
+        x="Variant",
+        y="Conversion rate",
+        text="Conversion rate",
+        template="plotly_dark",
+        title="A/B conversion comparison",
+    )
 
-        st.markdown(
-            f"""
-<div class="source-item">
+    fig.update_traces(
+        texttemplate="%{text:.2%}",
+        textposition="outside",
+    )
 
-<div class="source-number">
-SOURCE {number}
-</div>
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        yaxis_tickformat=".0%",
+        margin=dict(l=10, r=10, t=55, b=10),
+    )
 
-<div class="source-title">
-{title}
-</div>
+    st.plotly_chart(fig, use_container_width=True)
 
-<div class="source-description">
-{description}
-</div>
+    st.markdown("### Experiment design checklist")
 
-{link_html}
+    st.dataframe(
+        pd.DataFrame(
+            {
+                "Stage": [
+                    "Hypothesis",
+                    "Primary metric",
+                    "Guardrail metrics",
+                    "Randomisation",
+                    "Sample size",
+                    "Decision rule",
+                ],
+                "Implementation": [
+                    "State one causal change and the expected behavioural mechanism.",
+                    "Use conversion rate or another pre-defined outcome.",
+                    "Monitor cancellation, delivery time, margin and customer complaints.",
+                    "Split eligible users without systematic selection bias.",
+                    "Predefine minimum exposure before reading the result.",
+                    "Do not ship on uplift alone; check significance, guardrails and economics.",
+                ],
+            }
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
 
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+# ---------------------------------------------------------------------
+# TAB 5: MARKET INTELLIGENCE
+# ---------------------------------------------------------------------
 
-    st.markdown("<br>", unsafe_allow_html=True)
+with tabs[4]:
+    st.markdown(
+        '<div class="section-label">05 / Market intelligence</div>',
+        unsafe_allow_html=True,
+    )
+    st.title("UAE food delivery: external research context")
 
     st.markdown(
         """
-<div class="premium-card">
-
-<div class="card-kicker">
-SOURCE GOVERNANCE
-</div>
-
-<div class="card-title">
-What is sourced vs. what is analytical?
-</div>
-
-<div class="card-text">
-
-<strong>Publicly sourced:</strong>
-Careem company and product context.
-
-<br><br>
-
-<strong>User-provided:</strong>
-The Growth Manager job requirements used to frame the case-study
-questions and analytical capabilities.
-
-<br><br>
-
-<strong>Independently created:</strong>
-The dataset, calculations, visualisations, diagnostic logic,
-experimentation hypotheses and recommendations in this prototype.
-
-<br><br>
-
-This separation prevents the prototype from presenting
-synthetic analytical output as confidential Careem information.
-
-</div>
-
-</div>
-""",
+        <div class="method-note">
+            This section separates public market intelligence from the portfolio
+            dataset. It demonstrates how an analyst combines internal telemetry
+            with external evidence before making a growth recommendation.
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
+    research_cards = [
+        (
+            "R1",
+            "Careem platform scale",
+            "Careem states that it serves more than 50 million customers, operates in 70+ cities across 10 countries, and is building an Everything App spanning mobility, food, groceries, payments and other services.",
+            "Careem About Us",
+        ),
+        (
+            "R2",
+            "Food assortment and demand",
+            "Careem's UAE Food page currently advertises access to 9,500 restaurants. Careem also reported a 36% increase in Food order volume during Suhoor hours in March 2025 versus February.",
+            "Careem Food; Careem Ramadan 2025",
+        ),
+        (
+            "R3",
+            "Subscription and retention",
+            "Careem Plus is positioned as a cross-service subscription. Careem says members save AED 300+ per month on average, with Food benefits including free delivery on qualifying orders and member discounts.",
+            "Careem Plus",
+        ),
+        (
+            "R4",
+            "UAE digital readiness",
+            "DataReportal reported 11.1 million internet users in the UAE in January 2025, equivalent to 99% internet penetration, alongside 11.3 million social-media user identities.",
+            "DataReportal Digital 2025: UAE",
+        ),
+        (
+            "R5",
+            "Convenience and ready-to-eat demand",
+            "McKinsey's 2026 MENA grocery research found food-to-go growth continued to outpace total grocery growth, with younger consumers showing stronger intent toward ready-to-eat options.",
+            "McKinsey, State of Grocery Retail MENA 2026",
+        ),
+        (
+            "R6",
+            "Last-mile optimisation",
+            "A 2025 research study using more than 8 million Dubai grocery orders found that adding five minutes of delivery-time flexibility reduced daily delivery mileage by about 30% and lifecycle CO2 emissions by about 20%.",
+            "Eshtiyagh et al., 2025",
+        ),
+    ]
 
-# ============================================================
-# 16. FOOTER
-# ============================================================
+    research_cols = st.columns(2)
+
+    for index, (ref, title, copy, source) in enumerate(research_cards):
+        with research_cols[index % 2]:
+            st.markdown(
+                f"""
+                <div class="research-card">
+                    <div class="insight-number">{ref}</div>
+                    <div class="insight-title">{title}</div>
+                    <div class="insight-copy">{copy}</div>
+                    <div class="source-ref">{source}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("### Competitive landscape")
+
+    competitive = pd.DataFrame(
+        {
+            "Platform": [
+                "Careem Food",
+                "Talabat",
+                "noon Food",
+            ],
+            "Public positioning signal": [
+                "Everything App + Food + subscription ecosystem",
+                "Broad UAE food, grocery and convenience marketplace",
+                "Food delivery + broader noon ecosystem and restaurant network",
+            ],
+            "Analytical implication": [
+                "Cross-service retention and subscription economics can reduce dependence on single-order economics.",
+                "Breadth and geographic coverage make assortment, delivery reliability and merchant density important battlegrounds.",
+                "Ecosystem scale and restaurant acquisition increase pressure on price, convenience and availability.",
+            ],
+            "Evidence": [
+                "Careem public pages",
+                "Talabat UAE public pages",
+                "noon Food partner page",
+            ],
+        }
+    )
+
+    st.dataframe(
+        competitive,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.markdown("### What the evidence suggests")
+
+    implication_cols = st.columns(3)
+
+    implications = [
+        (
+            "01",
+            "Retention is a strategic lever",
+            "Subscription, cross-service usage and repeat ordering create reasons to optimise LTV and frequency, not just acquisition.",
+        ),
+        (
+            "02",
+            "Convenience must be measured as a system",
+            "Delivery time, cancellation, assortment, price and customer effort interact. A single KPI can hide a weak customer experience.",
+        ),
+        (
+            "03",
+            "Growth should be locally segmented",
+            "UAE behaviour is highly digital, but market, time-of-day, cuisine, customer lifecycle and value sensitivity can differ materially.",
+        ),
+    ]
+
+    for col, (number, title, copy) in zip(
+        implication_cols,
+        implications,
+    ):
+        with col:
+            st.markdown(
+                f"""
+                <div class="insight-card">
+                    <div class="insight-number">{number}</div>
+                    <div class="insight-title">{title}</div>
+                    <div class="insight-copy">{copy}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+# ---------------------------------------------------------------------
+# TAB 6: REFERENCES
+# ---------------------------------------------------------------------
+
+with tabs[5]:
+    st.markdown(
+        '<div class="section-label">06 / References</div>',
+        unsafe_allow_html=True,
+    )
+    st.title("Research and source register")
+
+    st.markdown(
+        """
+        <div class="method-note">
+            Citation style: numbered source register with organisation or author,
+            publication title, publication date where available, and direct URL.
+            Public-source claims are not presented as Careem internal data.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    references = [
+        (
+            "[1]",
+            "Careem",
+            "About Us",
+            "Careem's public company profile and platform scale.",
+            "https://www.careem.com/en-AE/about-us/",
+        ),
+        (
+            "[2]",
+            "Careem",
+            "Food - Always eat on time",
+            "Current public UAE Food proposition and restaurant assortment.",
+            "https://www.careem.com/en-AE/food/",
+        ),
+        (
+            "[3]",
+            "Careem",
+            "Ramadan 2025 with Careem",
+            "Public Food order-volume and UAE behavioural observations.",
+            "https://blog.careem.com/posts/ramadan-trends-2025",
+        ),
+        (
+            "[4]",
+            "Careem",
+            "Careem Plus",
+            "Public subscription benefits and member-value proposition.",
+            "https://www.careem.com/en-AE/cplus/",
+        ),
+        (
+            "[5]",
+            "Careem",
+            "Pricing and fees",
+            "Public UAE Food service-fee and delivery-fee information.",
+            "https://help.careem.com/hc/en-us/articles/8675020815251-Pricing-and-fees",
+        ),
+        (
+            "[6]",
+            "Careem",
+            "Introducing Scheduling on Careem Food",
+            "Public product rationale around meal-time demand and planning.",
+            "https://blog.careem.com/posts/introducing-scheduling-on-careem-food",
+        ),
+        (
+            "[7]",
+            "DataReportal / Kepios",
+            "Digital 2025: The United Arab Emirates",
+            "UAE internet, mobile and social-media adoption context.",
+            "https://datareportal.com/reports/digital-2025-united-arab-emirates",
+        ),
+        (
+            "[8]",
+            "U.S. Department of Commerce",
+            "United Arab Emirates - eCommerce",
+            "UAE e-commerce environment and consumer considerations.",
+            "https://www.trade.gov/country-commercial-guides/united-arab-emirates-ecommerce",
+        ),
+        (
+            "[9]",
+            "McKinsey & Company",
+            "State of grocery retail MENA 2026: Managing the growth paradox",
+            "MENA food-to-go and ready-to-eat consumer trends.",
+            "https://www.mckinsey.com/industries/retail/our-insights/state-of-grocery-retail-mena-2026-managing-the-growth-paradox",
+        ),
+        (
+            "[10]",
+            "J. Eshtiyagh et al.",
+            "The Value of Patience in Online Grocery Shopping",
+            "2025 research using 8+ million Dubai grocery orders and last-mile optimisation findings.",
+            "https://arxiv.org/abs/2510.19066",
+        ),
+        (
+            "[11]",
+            "Talabat UAE",
+            "Food delivery from your nearest restaurants in UAE",
+            "Public competitor footprint and proposition.",
+            "https://ae.talabat.com/",
+        ),
+        (
+            "[12]",
+            "noon Food",
+            "Grow your restaurant business with noon Food",
+            "Public competitor restaurant-network positioning.",
+            "https://food-partners.noon.com/uae-en/",
+        ),
+        (
+            "[13]",
+            "GitHub",
+            "careem-auto-analyst",
+            "Project repository and reproducible code.",
+            "https://github.com/theanjalo877-jpg/careem-auto-analyst",
+        ),
+    ]
+
+    for ref, organisation, title, description, url in references:
+        st.markdown(
+            f"""
+            <div class="source-card" style="margin-bottom:10px;">
+                <div class="source-title">
+                    {ref} {organisation} — {title}
+                </div>
+                <div class="source-copy">
+                    {description}
+                </div>
+                <div class="source-ref">
+                    {url}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("### Data provenance")
+
+    st.dataframe(
+        pd.DataFrame(
+            {
+                "Layer": [
+                    "Project telemetry",
+                    "Calculated metrics",
+                    "Scenario modelling",
+                    "External research",
+                ],
+                "Source": [
+                    "data.csv in this repository",
+                    "Derived from data.csv",
+                    "User-adjustable assumptions in sidebar",
+                    "Public sources listed above",
+                ],
+                "Confidential Careem data used": [
+                    "No",
+                    "No",
+                    "No",
+                    "No",
+                ],
+            }
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+# ---------------------------------------------------------------------
+# FOOTER
+# ---------------------------------------------------------------------
 
 st.markdown(
     """
-<br><br>
-
-<div style="
-    border-top:1px solid rgba(255,255,255,0.08);
-    padding-top:1.5rem;
-    text-align:center;
-    color:#647080;
-    font-family:'JetBrains Mono';
-    font-size:0.62rem;
-    letter-spacing:0.08em;
-">
-
-INDEPENDENT BUSINESS ANALYTICS PROTOTYPE
-&nbsp; • &nbsp;
-ANJALO THEOPHINE WILSON
-&nbsp; • &nbsp;
-2026
-
-</div>
-""",
+    <div class="footer">
+        <strong>Careem Food UAE Growth Auto-Analyst</strong><br>
+        Portfolio project by Anjalo Theophine Wilson. Built to demonstrate
+        business analytics, digital analytics, customer intelligence, growth
+        economics, experimentation, research synthesis and decision storytelling.
+        Public research is cited separately from the illustrative project dataset.
+    </div>
+    """,
     unsafe_allow_html=True,
 )
