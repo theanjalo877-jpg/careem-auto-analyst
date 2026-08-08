@@ -35,7 +35,7 @@ with st.expander("📌 STRATEGIC OVERVIEW, RESEARCH SOURCE CITATIONS & DOCUMENTA
         st.markdown("- **Corporate Financial Source:** Baseline run-rate tracking informed by public corporate reporting figures from [LinkedIn Corporate Financial Disclosures](https://linkedin.com).")
         st.markdown("- **Open-Source Code Repository:** [GitHub - careem-auto-analyst](https://github.com)")
 
-# Re-branded with corporate nomenclature
+# Engagement Metric Matrix Section
 with st.expander("💼 ENGAGEMENT METRIC PROFILE & COMPETENCY BRIEF", expanded=False):
     st.markdown("#### **Growth Analyst Capability Summary Matrix**")
     tab_summary, tab_exp, tab_skills = st.tabs(["📋 Executive Summary", "💼 Selected Experience", "🛠️ Core Competencies"])
@@ -79,12 +79,10 @@ st.sidebar.subheader("🎯 Active Segment Filters")
 selected_cities = st.sidebar.multiselect("Filter by UAE City", options=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"], default=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"])
 selected_channels = st.sidebar.multiselect("Filter by Channel", options=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"], default=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"])
 
-# 4. Ingestion Fail-safe Framework
+# 4. Ingestion Framework
 try:
     df = pd.read_csv("data.csv")
-    
     filtered_df = df[df['city'].isin(selected_cities) & df['acquisition_channel'].isin(selected_channels)]
-    
     st.success(f"📊 Auto-loaded data subset containing {len(filtered_df):,} active records.")
     
     # Calculate Core Executive Metrics scaled precisely to Careem's authentic local performance baselines
@@ -98,13 +96,12 @@ try:
         
     aov = total_revenue / total_orders if total_orders > 0 else 68.80
     
-    # Display Executive Grid with high precision formatting
+    # Display Executive Grid
     st.subheader("📈 Core Business Performance Aggregations")
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Segment Revenue", f"AED {total_revenue:,.2f}")
     col2.metric("Total Segment Orders", f"{total_orders:,}")
     col3.metric("Average Order Value (AOV)", f"AED {aov:.2f}")
-    
     st.divider()
     
     # MASTER UNIFIED COLOR MAP
@@ -121,7 +118,6 @@ try:
     
     if 'city' in filtered_df.columns and 'revenue' in filtered_df.columns:
         grouped_data = filtered_df.groupby(['city', 'acquisition_channel'], as_index=False)[['revenue']].sum()
-        
         fig_city = px.bar(
             grouped_data, 
             x='city', 
@@ -138,7 +134,6 @@ try:
         
     if 'acquisition_channel' in filtered_df.columns and 'orders' in filtered_df.columns:
         channel_grouped = filtered_df.groupby('acquisition_channel', as_index=False)['orders'].sum()
-        
         fig_channel = px.pie(
             channel_grouped, 
             names='acquisition_channel', 
@@ -176,6 +171,9 @@ try:
                     genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
-                    prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide: 1. WHAT THE DATA SAYS, 2. THE PROBLEM, 3. RECOMMENDED ACTION, 4. GROWTH EXPERIMENT FRAMEWORK."
-                    
+                    prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide insights."
                     response = model.generate_content(prompt)
+                    st.markdown(response.text)
+                except Exception as e:
+                    st.error(f"API Error: {str(e)}")
+except Exception as e:
