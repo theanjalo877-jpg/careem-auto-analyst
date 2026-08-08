@@ -176,10 +176,6 @@ try:
                     genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
-                    prompt = f"""
-                    You are an expert Senior Growth Marketing Analyst at Careem Food UAE. 
-                    Analyze these dataset summary statistics and marketing channels metrics:
+                    prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide: 1. WHAT THE DATA SAYS, 2. THE PROBLEM, 3. RECOMMENDED ACTION, 4. GROWTH EXPERIMENT FRAMEWORK."
                     
-                    DATA SUMMARY:
-                    {summary_stats}
-                    
+                    response = model.generate_content(prompt)
