@@ -1,1 +1,12 @@
+customer_id,city,orders,revenue,acquisition_channel,last_order_days,discount_used,delivery_time,cancellations
+CRM-1001,Dubai,5,450.50,Instagram Paid,12,1,28,0
+CRM-1002,Dubai,12,980.20,TikTok Brand,4,1,32,0
+CRM-1003,Abu Dhabi,3,150.00,Google Search,45,0,22,1
+CRM-1004,Sharjah,8,620.10,Organic Referral,2,1,35,0
+CRM-1005,Dubai,1,75.00,Google Search,18,0,19,0
+CRM-1006,Abu Dhabi,9,710.40,TikTok Brand,7,1,41,0
+CRM-1007,Ajman,2,110.00,Instagram Paid,29,0,26,0
+CRM-1008,Dubai,14,1250.80,Organic Referral,1,1,31,0
+CRM-1009,Sharjah,4,310.20,Instagram Paid,15,1,24,0
+CRM-1010,Abu Dhabi,6,540.60,Google Search,9,0,30,0
 
