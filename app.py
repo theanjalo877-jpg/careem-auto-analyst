@@ -6,14 +6,16 @@ import google.generativeai as genai
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="Careem Food Auto-Analyst",
+    page_title="Careem Food Auto-Analyst | Anjalo Theophine Wilson",
     page_icon="📊",
     layout="wide"
 )
 
-# 2. Main Executive Header Portfolio Context
+# 2. Main Executive Header Portfolio Context (UNMISTAKABLE BRANDING)
 st.title("🚀 CAREEM FOOD — UAE GROWTH AUTO-ANALYST")
-st.caption("AI-Powered Growth & Business Intelligence Submission | Interactive Executive Prototype")
+st.subheader("💡 Developed & Engineered by: Anjalo Theophine Wilson")
+st.caption("AI-Powered Growth & Business Intelligence Submission | Interactive Executive Production Dashboard")
+st.divider()
 
 # Clean, professional submission overview block with verified citations
 with st.expander("📌 STRATEGIC OVERVIEW, RESEARCH SOURCE CITATIONS & DOCUMENTATION", expanded=True):
@@ -36,7 +38,7 @@ with st.expander("📌 STRATEGIC OVERVIEW, RESEARCH SOURCE CITATIONS & DOCUMENTA
         st.markdown("- **Open-Source Code Repository:** [GitHub - careem-auto-analyst](https://github.com)")
 
 # Engagement Metric Matrix Section
-with st.expander("💼 ENGAGEMENT METRIC PROFILE & COMPETENCY BRIEF", expanded=False):
+with st.expander("💼 PROFESSIONAL COMPETENCY BRIEF & CREDENTIALS", expanded=False):
     st.markdown("#### **Growth Analyst Capability Summary Matrix**")
     tab_summary, tab_exp, tab_skills = st.tabs(["📋 Executive Summary", "💼 Selected Experience", "🛠️ Core Competencies"])
     
@@ -174,8 +176,3 @@ try:
                     prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide insights."
                     response = model.generate_content(prompt)
                     st.markdown(response.text)
-                except Exception as api_err:
-                    st.error(f"API Error: {str(api_err)}")
-
-except Exception as init_err:
-    st.error(f"❌ Initialization Error: {str(init_err)}")
