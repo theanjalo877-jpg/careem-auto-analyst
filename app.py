@@ -177,6 +177,6 @@ try:
                     st.markdown(response.text)
                     st.error(f"AI Engine Error: {str(api_err)}")
 
-except Exception as init_err:
-    st.error(f"❌ Application Error: {str(init_err)}")
+                except Exception as init_err:
+                 st.error(f"❌ Application Error: {str(init_err)}")
 
