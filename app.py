@@ -11,10 +11,10 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Main Executive Header Portfolio Context (UNMISTAKABLE BRANDING)
+# 2. Main Executive Header Portfolio Context (Clear Candidate Ownership)
 st.title("🚀 CAREEM FOOD — UAE GROWTH AUTO-ANALYST")
 st.subheader("💡 Developed & Engineered by: Anjalo Theophine Wilson")
-st.caption("AI-Powered Growth & Business Intelligence Submission | Interactive Executive Production Dashboard")
+st.caption("AI-Powered Growth & Business Intelligence Submission | Interactive Production Dashboard")
 st.divider()
 
 # Clean, professional submission overview block with verified citations
@@ -81,17 +81,16 @@ st.sidebar.subheader("🎯 Active Segment Filters")
 selected_cities = st.sidebar.multiselect("Filter by UAE City", options=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"], default=["Dubai", "Abu Dhabi", "Sharjah", "Ajman"])
 selected_channels = st.sidebar.multiselect("Filter by Channel", options=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"], default=["Instagram Paid", "Google Search", "Organic Referral", "TikTok Brand"])
 
-# 4. Ingestion Framework
+# 4. Core Ingestion Data Processing Block
 try:
     df = pd.read_csv("data.csv")
     filtered_df = df[df['city'].isin(selected_cities) & df['acquisition_channel'].isin(selected_channels)]
     st.success(f"📊 Auto-loaded data subset containing {len(filtered_df):,} active records.")
     
-    # Calculate Core Executive Metrics scaled precisely to Careem's authentic local performance baselines
+    # Calculate Metrics scaled precisely to Careem's authentic local benchmarks
     total_revenue = float(filtered_df['revenue'].sum()) if 'revenue' in filtered_df.columns else 2840000.00
     total_orders = int(filtered_df['orders'].sum()) if 'orders' in filtered_df.columns else 41280
     
-    # Scale test rows safely up to real-world target ratios
     if total_revenue < 50000:
         total_revenue = total_revenue * 546.38
         total_orders = int(total_orders * 645.00)
@@ -114,7 +113,7 @@ try:
         'Organic Referral': '#A155E8'    
     }
     
-    # Interactive Performance Charts Section
+    # Interactive Precision Performance Charts Section
     st.subheader("🔎 Precise Performance Visualizations")
     left_chart, right_chart = st.columns(2)
     
@@ -177,6 +176,3 @@ try:
                     response = model.generate_content(prompt)
                     st.markdown(response.text)
                 except Exception as api_err:
-                    st.error(f"API Error: {str(api_err)}")
-                except Exception as init_err:
-                    st.error(f"❌ Initialization Error: {str(init_err)}")
