@@ -3,4 +3,4 @@ pandas
 numpy
 plotly
 google-generativeai
-
+starlette==1.3.1
