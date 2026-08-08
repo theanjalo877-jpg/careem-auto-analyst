@@ -10,11 +10,142 @@ st.set_page_config(
     layout="wide"
 )
 
-# 2. Main Executive Header Portfolio Layout
-st.title("💚 CAREEM FOOD — UAE GROWTH AUTO-ANALYST")
-st.subheader("💡 Developed & Engineered by Senior BI Candidate: Anjalo Theophine Wilson")
-st.caption("Enterprise Business Intelligence Engine • Production Deployment State")
-st.divider()
+# PREMIUM INJECTED CSS & REAL-TIME MOTION GRAPHICS CANVAS ENGINE
+st.markdown("""
+<style>
+    @import url('https://googleapis.com');
+
+    /* Global Dark Canvas Base */
+    .stApp {
+        background-color: #06090E !important;
+    }
+
+    /* Fixed Kinetic Matrix Layer Background */
+    #kinetic-matrix-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.45;
+    }
+
+    /* Structural Core App Wrapper Override */
+    .block-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Luxury Avant-Garde Typographic Header Layout */
+    .premium-hero-container {
+        padding: 3.5rem 0 2rem 0;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+    }
+    
+    .luxury-heading {
+        font-family: 'Syne', sans-serif !important;
+        font-size: 3.85rem !important;
+        font-weight: 800 !important;
+        line-height: 0.95;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, #FFFFFF 30%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0 !important;
+        text-transform: uppercase;
+    }
+
+    .luxury-subheading {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 600 !important;
+        color: #E5E7EB !important;
+        margin-top: 1rem !important;
+        letter-spacing: -0.5px;
+    }
+
+    .luxury-byline {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.9rem !important;
+        color: #10B981 !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 800;
+        margin-top: 0.25rem;
+    }
+</style>
+
+<!-- KINETIC MATRIX PARTICLES VECTOR BACKGROUND SCRIPT Engine -->
+<canvas id="kinetic-matrix-canvas"></canvas>
+<script>
+    const canvas = document.getElementById('kinetic-matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particles = [];
+    const count = 45;
+
+    for (let i = 0; i < count; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5 + 0.5,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.04)';
+
+        for (let i = 0; i < count; i++) {
+            let p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            for (let j = i + 1; j < count; j++) {
+                let p2 = particles[j];
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if (dist < 130) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+""", unsafe_allow_html=True)
+
+# 2. Main Executive Header Portfolio Layout Presentation
+st.markdown("""
+<div class="premium-hero-container">
+    <h1 class="luxury-heading">Careem Food<br>Growth Auto-Analyst</h1>
+    <div class="luxury-subheading">Developed & Engineered by Senior BI Candidate: Anjalo Theophine Wilson</div>
+    <div class="luxury-byline">Enterprise Data Infrastructure • Production Deployment Hub</div>
+</div>
+""", unsafe_allow_html=True)
 
 # Clean, professional submission overview block with verified citations
 with st.expander("📌 STRATEGIC SYSTEM MAP & REFERENCE CITATIONS", expanded=True):
