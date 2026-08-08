@@ -178,3 +178,4 @@ try:
                     st.error(f"API Error: {str(api_err)}")
 
 except Exception as init_err:
+    st.error(f"❌ Initialization Error: {str(init_err)}")
