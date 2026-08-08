@@ -35,7 +35,7 @@ with st.expander("📌 STRATEGIC OVERVIEW, RESEARCH SOURCE CITATIONS & DOCUMENTA
         st.markdown("- **Corporate Financial Source:** Baseline run-rate tracking informed by public corporate reporting figures from [LinkedIn Corporate Financial Disclosures](https://linkedin.com).")
         st.markdown("- **Open-Source Code Repository:** [GitHub - careem-auto-analyst](https://github.com)")
 
-# FIXED: Re-branded with corporate nomenclature
+# Re-branded with corporate nomenclature
 with st.expander("💼 ENGAGEMENT METRIC PROFILE & COMPETENCY BRIEF", expanded=False):
     st.markdown("#### **Growth Analyst Capability Summary Matrix**")
     tab_summary, tab_exp, tab_skills = st.tabs(["📋 Executive Summary", "💼 Selected Experience", "🛠️ Core Competencies"])
@@ -173,7 +173,9 @@ try:
                     summary_stats = filtered_df.describe().to_string()
                     channel_summary = filtered_df.groupby('acquisition_channel')[['revenue', 'orders']].sum().to_string()
                     
-                    # FIX: Enforcing strict native modern SDK layout variables to avoid deprecation tracking drops
                     genai.configure(api_key=api_key)
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
+                    prompt = "You are a Growth Analyst. Data summary: " + summary_stats + " Channel Performance: " + channel_summary + " Provide: 1. WHAT THE DATA SAYS, 2. THE PROBLEM, 3. RECOMMENDED ACTION, 4. GROWTH EXPERIMENT FRAMEWORK."
+                    
+                    response = model.generate_content(prompt)
